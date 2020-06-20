@@ -1,0 +1,7 @@
+bin/
+obj/
+out/
+BiteSizedCsharp.sln.DotSettings.user
+coverage.json
+coverage.opencover.xml
+.idea/
