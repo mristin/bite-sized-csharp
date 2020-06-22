@@ -1,5 +1,16 @@
 # bite-sized
 
+![Check](
+https://github.com/mristin/bite-sized-csharp/workflows/Check/badge.svg
+) [![Coverage Status](
+https://coveralls.io/repos/github/mristin/bite-sized-csharp/badge.svg)](
+https://coveralls.io/github/mristin/bite-sized-csharp
+) [![Nuget](
+https://img.shields.io/nuget/v/BiteSized)](
+https://www.nuget.org/packages/BiteSized
+)
+
+
 Bite-sized is a dotnet tool to check that your source code is not too long 
 (number of lines) and not too wide (number of characters per line).
 
