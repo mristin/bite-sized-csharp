@@ -129,9 +129,6 @@ dotnet bite-sized \
 
 ## Contributing
 
-
-## Contributing
-
 Feature requests, bug reports *etc.* are highly welcome! Please [submit
 a new issue](https://github.com/mristin/bite-sized-csharp/issues/new).
 
