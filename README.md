@@ -127,6 +127,15 @@ dotnet bite-sized \
     --exclude "**/obj/**"
 ``` 
 
+The limits can be adjusted if you are not happy with the defaults:
+
+```bash
+dotnet bite-sized \
+    --inputs "ProjectX/**/*.cs" \
+    --max-line-length 160 \
+    --max-lines-in-file 5000
+```
+
 ## Contributing
 
 Feature requests, bug reports *etc.* are highly welcome! Please [submit
