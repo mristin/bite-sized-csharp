@@ -106,7 +106,7 @@ dotnet tool install BiteSized
 
 You run bite-sized through `dotnet`.
 
-To obtain help:
+**Overview**. To obtain an overview of the command-line arguments, use `--help`:
 
 ```bash
 dotnet bite-sized --help

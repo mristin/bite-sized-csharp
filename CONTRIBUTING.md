@@ -43,10 +43,10 @@ invoked from there.
 The solution is built with:
 
 ```bash
-dotnet publish --configuration Release --output out
+dotnet publish --configuration Release --output ../out
 ```
 
-The resulting binaries are available in `src/out/` directory
+The resulting binaries are available in `out/` directory.
 
 ### Continuous Integration
 
@@ -68,10 +68,17 @@ Run the tests:
 dotnet test /p:CollectCoverage=true
 ```
 
-See [src/.github/workflows/check.yml](
-src/.github/workflows/check.yml
+Check that the help documented in the readme coincides
+with the actual `--help` message (after building to `out/`):
+
+```powershell
+src/CheckHelpInReadme.ps1
+```
+
+See [.github/workflows/check.yml](
+.github/workflows/check.yml
 ) for a reproducible setup.
 
-See [src/.github/workflows/generate-nuget.yml](
-src/.github/workflows/generate-nuget.yml
+See [.github/workflows/generate-nuget.yml](
+.github/workflows/generate-nuget.yml
 ) for how to generate and publish a NuGet package.
