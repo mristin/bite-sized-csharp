@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using StringWriter = System.IO.StringWriter;
 using NUnit.Framework;
 
-namespace BiteSizedCsharp.Test
+namespace BiteSized.Test
 {
     public class OutputTests
     {

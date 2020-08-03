@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Path = System.IO.Path;
 using System.Linq;
 
-namespace BiteSizedCsharp
+namespace BiteSized
 {
     public static class Input
     {

@@ -2,7 +2,7 @@ using Path = System.IO.Path;
 using Environment = System.Environment;
 using NUnit.Framework;
 
-namespace BiteSizedCsharp.Test
+namespace BiteSized.Test
 {
     public class ProgramTests
     {
@@ -113,6 +113,39 @@ namespace BiteSizedCsharp.Test
             Assert.AreEqual(
                 $"OK   {pathIncluded}{nl}",
                 consoleCapture.Output());
+        }
+
+        [Test]
+        public void TestIgnoreLinesMatching()
+        {
+            using var tmpdir = new TemporaryDirectory();
+
+            string path = Path.Join(tmpdir.Path, "SomeProgram.cs");
+
+            System.IO.File.WriteAllText(path, "12345\nAAA 123456\n123456\n");
+
+            using var consoleCapture = new ConsoleCapture();
+
+            int exitCode = Program.MainWithCode(
+                new[]
+                {
+                    "--inputs", path,
+                    "--max-line-length", "3",
+                    "--ignore-lines-matching", "^AAA"
+                });
+
+            string nl = Environment.NewLine;
+
+            Assert.AreEqual(1, exitCode);
+
+            Assert.AreEqual(
+                $"FAIL {path}{nl}" +
+                $"  * The following line(s) have more than allowed 3 characters:{nl}" +
+                $"    * Line 1: 5 characters{nl}" +
+                $"    * Line 3: 6 characters{nl}",
+                consoleCapture.Output());
+
+            Assert.AreEqual("", consoleCapture.Error());
         }
     }
 }

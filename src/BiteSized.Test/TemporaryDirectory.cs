@@ -1,6 +1,6 @@
 using IDisposable = System.IDisposable;
 
-namespace BiteSizedCsharp.Test
+namespace BiteSized.Test
 {
     class TemporaryDirectory : IDisposable
     {
