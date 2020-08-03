@@ -2,31 +2,64 @@
 using StreamReader = System.IO.StreamReader;
 using File = System.IO.File;
 using Environment = System.Environment;
+using Regex = System.Text.RegularExpressions.Regex;
+
 using System.Collections.Generic;
 
 // We can not cherry-pick imports from System.CommandLine since InvokeAsync is a necessary extension.
 using System.CommandLine;
 
-namespace BiteSizedCsharp
+namespace BiteSized
 {
     public class Program
     {
-        private static int Handle(string[] inputs, string[] excludes, uint maxLineLength, uint maxLinesInFile)
+        // ReSharper disable once ClassNeverInstantiated.Global
+        // ReSharper disable once MemberCanBePrivate.Global
+        public class Arguments
+        {
+#pragma warning disable 8618
+            // ReSharper disable UnusedAutoPropertyAccessor.Global
+            // ReSharper disable CollectionNeverUpdated.Global
+            public string[] Inputs { get; set; }
+            public string[]? Excludes { get; set; }
+            public string[]? IgnoreLinesMatching { get; set; }
+            public uint MaxLineLength { get; set; }
+            public uint MaxLinesInFile { get; set; }
+            // ReSharper restore CollectionNeverUpdated.Global
+            // ReSharper restore UnusedAutoPropertyAccessor.Global
+#pragma warning restore 8618
+        }
+
+        private static int Handle(Arguments a)
         {
             int exitCode = 0;
 
             string cwd = System.IO.Directory.GetCurrentDirectory();
             IEnumerable<string> paths = Input.MatchFiles(
                 cwd,
-                new List<string>(inputs),
-                new List<string>(excludes ?? new string[0]));
+                new List<string>(a.Inputs),
+                new List<string>(a.Excludes ?? new string[0]));
+
+            var ignoreLinesMatching = new List<Regex>(a.IgnoreLinesMatching?.Length ?? 0);
+            foreach (var pattern in a.IgnoreLinesMatching ?? new string[] { })
+            {
+                try
+                {
+                    var regex = new Regex(pattern);
+                    ignoreLinesMatching.Add(regex);
+                }
+                catch (System.Exception ex)
+                {
+                    Console.Error.WriteLine($"Failed to parse the regular expression {pattern}: {ex}");
+                }
+            }
 
             foreach (string path in paths)
             {
                 using StreamReader sr = File.OpenText(path);
-                var record = Inspection.InspectLines(sr, maxLineLength);
+                var record = Inspection.InspectLines(sr, a.MaxLineLength, ignoreLinesMatching);
 
-                bool isOk = Output.Report(path, record, maxLineLength, maxLinesInFile, Console.Out);
+                bool isOk = Output.Report(path, record, a.MaxLineLength, a.MaxLinesInFile, Console.Out);
                 if (!isOk)
                 {
                     exitCode = 1;
@@ -46,9 +79,13 @@ namespace BiteSizedCsharp
                         "Glob patterns of the files to be inspected")
                     {Required = true},
 
-                new Option<string[]>(
+                new Option<string[]?>(
                     new[] {"--excludes", "-e"},
                     "Glob patterns of the files to be excluded from inspection"),
+
+                new Option<string[]?>(
+                    new []{"--ignore-lines-matching"},
+                    "Ignore lines matching the regular expression(s)"),
 
                 new Option<uint>(
                     "--max-line-length",
@@ -62,9 +99,7 @@ namespace BiteSizedCsharp
                     "Maximum number of lines allowed in a file")
             };
 
-            rootCommand.Handler = System.CommandLine.Invocation.CommandHandler.Create(
-                (string[] inputs, string[] excludes, uint maxLineLength, uint maxLinesInFile) =>
-                    Handle(inputs, excludes, maxLineLength, maxLinesInFile));
+            rootCommand.Handler = System.CommandLine.Invocation.CommandHandler.Create((Arguments a) => Handle(a));
 
             int exitCode = rootCommand.InvokeAsync(args).Result;
             return exitCode;

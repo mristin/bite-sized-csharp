@@ -3,7 +3,7 @@ using StringWriter = System.IO.StringWriter;
 using TextWriter = System.IO.TextWriter;
 using Console = System.Console;
 
-namespace BiteSizedCsharp.Test
+namespace BiteSized.Test
 {
     public class ConsoleCapture : IDisposable
     {

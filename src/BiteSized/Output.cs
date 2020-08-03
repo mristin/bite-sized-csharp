@@ -1,7 +1,7 @@
 using System;
 using TextWriter = System.IO.TextWriter;
 
-namespace BiteSizedCsharp
+namespace BiteSized
 {
     public static class Output
     {

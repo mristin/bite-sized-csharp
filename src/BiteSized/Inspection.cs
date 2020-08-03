@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using TextReader = System.IO.TextReader;
+using ArgumentException = System.ArgumentException;
+using Regex = System.Text.RegularExpressions.Regex;
 
-namespace BiteSizedCsharp
+namespace BiteSized
 {
     public static class Inspection
     {
@@ -50,8 +52,9 @@ namespace BiteSizedCsharp
         /// </summary>
         /// <param name="reader">Reads the source file</param>
         /// <param name="maxLineLength">maximum allowed line length</param>
+        /// <param name="ignoreLinesMatching">ignore all lines matching one of the regular expressions</param>
         /// <returns>List of problematic comments</returns>
-        public static Record InspectLines(TextReader reader, uint maxLineLength)
+        public static Record InspectLines(TextReader reader, uint maxLineLength, List<Regex> ignoreLinesMatching)
         {
             var linesTooLong = new List<LineTooLong>(1024);
             ulong lineCount = 0;
@@ -59,7 +62,9 @@ namespace BiteSizedCsharp
             string? line;
             while ((line = reader.ReadLine()) != null)
             {
-                if (line.Length > maxLineLength)
+                bool ignored = ignoreLinesMatching.Exists((regex) => regex.IsMatch(line));
+
+                if (!ignored && line.Length > maxLineLength)
                 {
                     linesTooLong.Add(new LineTooLong(lineCount + 1, (uint)line.Length));
                 }
