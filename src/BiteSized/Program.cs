@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 // We can not cherry-pick imports from System.CommandLine since InvokeAsync is a necessary extension.
 using System.CommandLine;
+using System.Linq;
 
 namespace BiteSized
 {
@@ -54,16 +55,27 @@ namespace BiteSized
                 }
             }
 
+            bool success = true;
             foreach (string path in paths)
             {
                 using StreamReader sr = File.OpenText(path);
                 var record = Inspection.InspectLines(sr, a.MaxLineLength, ignoreLinesMatching);
 
                 bool isOk = Output.Report(path, record, a.MaxLineLength, a.MaxLinesInFile, Console.Out);
-                if (!isOk)
+                success = success & isOk;
+            }
+
+            if (!success)
+            {
+                if (ignoreLinesMatching.Count > 0)
                 {
-                    exitCode = 1;
+                    Console.Out.WriteLine(
+                        $"The --ignore-lines-matching was set to: " +
+                        string.Join(" ", ignoreLinesMatching.Select(i => i.ToString())));
                 }
+                Console.Error.WriteLine("One or more input files failed the checks.");
+
+                exitCode = 1;
             }
 
             return exitCode;

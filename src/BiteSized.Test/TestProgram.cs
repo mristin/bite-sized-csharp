@@ -82,7 +82,7 @@ namespace BiteSized.Test
                 $"  * The file is too long. It contains 2 line(s), but only 1 line(s) are allowed.{nl}",
                 consoleCapture.Output());
 
-            Assert.AreEqual("", consoleCapture.Error());
+            Assert.AreEqual($"One or more input files failed the checks.{nl}", consoleCapture.Error());
         }
 
         [Test]
@@ -142,10 +142,11 @@ namespace BiteSized.Test
                 $"FAIL {path}{nl}" +
                 $"  * The following line(s) have more than allowed 3 characters:{nl}" +
                 $"    * Line 1: 5 characters{nl}" +
-                $"    * Line 3: 6 characters{nl}",
+                $"    * Line 3: 6 characters{nl}" +
+                $"The --ignore-lines-matching was set to: ^AAA{nl}",
                 consoleCapture.Output());
 
-            Assert.AreEqual("", consoleCapture.Error());
+            Assert.AreEqual($"One or more input files failed the checks.{nl}", consoleCapture.Error());
         }
     }
 }
