@@ -111,14 +111,33 @@ To obtain help:
 ```bash
 dotnet bite-sized --help
 ```
+<!--- Help starts. -->
+```
+BiteSized:
+  Checks that the C# code is bite-sized in width (line length) and height (number of lines).
 
-You specify which files need to be checked using glob patterns in `--inputs`:
+Usage:
+  BiteSized [options]
+
+Options:
+  -i, --inputs <inputs> (REQUIRED)                   Glob patterns of the files to be inspected
+  -e, --excludes <excludes>                          Glob patterns of the files to be excluded from inspection
+  --ignore-lines-matching <ignore-lines-matching>    Ignore lines matching the regular expression(s)
+  --max-line-length <max-line-length>                Maximum allowed line length [default: 120]
+  --max-lines-in-file <max-lines-in-file>            Maximum number of lines allowed in a file [default: 2000]
+  --version                                          Show version information
+  -?, -h, --help                                     Show help and usage information
+```
+<!--- Help ends. -->
+
+**Inputs**. You specify which files need to be checked using glob patterns
+in `--inputs`:
 
 ```bash
 dotnet bite-sized --inputs "ProjectX/**/*.cs"
 ```
 
-You exclude by passing `--excludes` with glob patterns
+**Excludes**. You exclude by passing `--excludes` with glob patterns
 *(we use '\' for line continuation here)*:
 
 ```bash
@@ -127,13 +146,30 @@ dotnet bite-sized \
     --exclude "**/obj/**"
 ```
 
-The limits can be adjusted if you are not happy with the defaults:
+**Adjust limits**. The limits can be adjusted if you are not happy with
+the defaults:
 
 ```bash
 dotnet bite-sized \
     --inputs "ProjectX/**/*.cs" \
     --max-line-length 160 \
     --max-lines-in-file 5000
+```
+
+**Ignore lines**. Sometimes you can not break a string since breaking it into
+multiple lines would break its semantic. For example, many formats do not allow
+you to split an URL into multiple lines.
+
+Hence you want to ignore such lines. You can specify with
+`--ignore-lines-matching` regular expressions such that all matching lines
+are ignored.
+
+For example:
+
+```bash
+dotnet bite-sized \
+    --inputs "ProjectX/**/*.cs" \
+    --ignore-lines-matching "(http|https|ftp)://" "mailto:"
 ```
 
 ## Contributing
