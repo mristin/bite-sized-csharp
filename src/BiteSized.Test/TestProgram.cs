@@ -46,7 +46,7 @@ namespace BiteSized.Test
 
             using var consoleCapture = new ConsoleCapture();
 
-            int exitCode = Program.MainWithCode(new[] { "--inputs", path });
+            int exitCode = Program.MainWithCode(new[] { "--inputs", path, "--verbose" });
 
             string nl = Environment.NewLine;
 
@@ -102,7 +102,9 @@ namespace BiteSized.Test
                 new[] {
                     "--inputs", Path.Join(tmpdir.Path, "Included*.cs"),
                     "--excludes", Path.Join(tmpdir.Path, "Excluded*.cs"),
-                    "--max-line-length", "3", "--max-lines-in-file", "1" });
+                    "--max-line-length", "3", "--max-lines-in-file", "1",
+                    "--verbose"
+                });
 
             string nl = Environment.NewLine;
 

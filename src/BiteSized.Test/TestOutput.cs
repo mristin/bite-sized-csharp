@@ -8,7 +8,7 @@ namespace BiteSized.Test
     public class OutputTests
     {
         [Test]
-        public void TestOK()
+        public void TestOKWithVerbose()
         {
             using var writer = new StringWriter();
 
@@ -16,10 +16,25 @@ namespace BiteSized.Test
                 new List<Inspection.LineTooLong>(),
                 10);
 
-            Output.Report("Program.cs", record, 13, 1984, writer);
+            Output.Report("Program.cs", record, 13, 1984, true, writer);
 
             var nl = Environment.NewLine;
             Assert.AreEqual($"OK   Program.cs{nl}", writer.ToString());
+        }
+
+        [Test]
+        public void TestOKWithoutVerbose()
+        {
+            using var writer = new StringWriter();
+
+            var record = new Inspection.Record(
+                new List<Inspection.LineTooLong>(),
+                10);
+
+            Output.Report("Program.cs", record, 13, 1984, false, writer);
+
+            var nl = Environment.NewLine;
+            Assert.AreEqual("", writer.ToString());
         }
 
         [Test]
@@ -34,7 +49,7 @@ namespace BiteSized.Test
                 },
                 10);
 
-            Output.Report("Program.cs", record, 13, 1984, writer);
+            Output.Report("Program.cs", record, 13, 1984, false, writer);
 
             var nl = Environment.NewLine;
             string expected = $"FAIL Program.cs{nl}" +
@@ -58,7 +73,7 @@ namespace BiteSized.Test
                 },
                 10);
 
-            Output.Report("Program.cs", record, 13, 1984, writer);
+            Output.Report("Program.cs", record, 13, 1984, false, writer);
 
             var nl = Environment.NewLine;
             string expected = $"FAIL Program.cs{nl}" +
@@ -79,7 +94,7 @@ namespace BiteSized.Test
                 new List<Inspection.LineTooLong>(),
                 5000);
 
-            Output.Report("Program.cs", record, 13, 1984, writer);
+            Output.Report("Program.cs", record, 13, 1984, false, writer);
 
             var nl = Environment.NewLine;
             string expected = $"FAIL Program.cs{nl}" +
@@ -102,7 +117,7 @@ namespace BiteSized.Test
                 },
                 5000);
 
-            Output.Report("Program.cs", record, 13, 1984, writer);
+            Output.Report("Program.cs", record, 13, 1984, false, writer);
 
             var nl = Environment.NewLine;
             string expected = $"FAIL Program.cs{nl}" +

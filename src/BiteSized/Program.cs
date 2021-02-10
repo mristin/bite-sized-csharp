@@ -26,6 +26,7 @@ namespace BiteSized
             public string[]? IgnoreLinesMatching { get; set; }
             public uint MaxLineLength { get; set; }
             public uint MaxLinesInFile { get; set; }
+            public bool Verbose { get; set; }
             // ReSharper restore CollectionNeverUpdated.Global
             // ReSharper restore UnusedAutoPropertyAccessor.Global
 #pragma warning restore 8618
@@ -61,7 +62,7 @@ namespace BiteSized
                 using StreamReader sr = File.OpenText(path);
                 var record = Inspection.InspectLines(sr, a.MaxLineLength, ignoreLinesMatching);
 
-                bool isOk = Output.Report(path, record, a.MaxLineLength, a.MaxLinesInFile, Console.Out);
+                bool isOk = Output.Report(path, record, a.MaxLineLength, a.MaxLinesInFile, a.Verbose, Console.Out);
                 success = success & isOk;
             }
 
@@ -108,7 +109,12 @@ namespace BiteSized
                 new Option<uint>(
                     "--max-lines-in-file",
                     () => 2000,
-                    "Maximum number of lines allowed in a file")
+                    "Maximum number of lines allowed in a file"),
+
+
+                new Option<bool>(
+                    "--verbose",
+                    "If set, displays the result for each individual file; otherwise, shows only errors")
             };
 
             rootCommand.Handler = System.CommandLine.Invocation.CommandHandler.Create((Arguments a) => Handle(a));

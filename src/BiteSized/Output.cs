@@ -15,7 +15,7 @@ namespace BiteSized
         /// <param name="writer">Writes the report</param>
         /// <returns>true if no trespasses</returns>
         public static bool Report(string path, Inspection.Record record,
-            uint maxLineLength, ulong maxLinesInFile, TextWriter writer)
+            uint maxLineLength, ulong maxLinesInFile, bool verbose, TextWriter writer)
         {
             ////
             // Precondition(s)
@@ -38,7 +38,11 @@ namespace BiteSized
 
             if (record.LinesTooLong.Count == 0 && record.LineCount <= maxLinesInFile)
             {
-                writer.WriteLine($"OK   {path}");
+                if (verbose)
+                {
+                    writer.WriteLine($"OK   {path}");
+                }
+
                 return true;
             }
 

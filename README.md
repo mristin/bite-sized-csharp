@@ -125,6 +125,7 @@ Options:
   --ignore-lines-matching <ignore-lines-matching>    Ignore lines matching the regular expression(s)
   --max-line-length <max-line-length>                Maximum allowed line length [default: 120]
   --max-lines-in-file <max-lines-in-file>            Maximum number of lines allowed in a file [default: 2000]
+  --verbose                                          If set, displays the result for each individual file; otherwise, shows only errors
   --version                                          Show version information
   -?, -h, --help                                     Show help and usage information
 ```
