@@ -56,28 +56,14 @@ You need to restore the tools:
 dotnet tool restore
 ```
 
-Check the format:
-
-```bash
-dotnet format --check
+Run all the pre-commit checks:
 ```
-
-Run the tests:
-
-```bash
-dotnet test /p:CollectCoverage=true
-```
-
-Check that the help documented in the readme coincides
-with the actual `--help` message (after building to `out/`):
-
-```powershell
-src/CheckHelpInReadme.ps1
+.\Check.ps1
 ```
 
 See [.github/workflows/check.yml](
 .github/workflows/check.yml
-) for a reproducible setup.
+) for the remote CI workflow that runs on GitHub.
 
 See [.github/workflows/generate-nuget.yml](
 .github/workflows/generate-nuget.yml

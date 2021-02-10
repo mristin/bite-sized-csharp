@@ -8,8 +8,14 @@
         "dotnet-format"
       ]
     },
-    "coveralls.net": {
+    "deadcsharp": {
       "version": "1.0.0",
+      "commands": [
+        "dead-csharp"
+      ]
+    },
+    "coveralls.net": {
+      "version": "2.0.0",
       "commands": [
         "csmacnz.Coveralls"
       ]
